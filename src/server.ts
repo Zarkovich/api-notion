@@ -20,7 +20,7 @@ const notion = new Client({
 });
 
 const app = Express();
-const PORT = 8000;
+const PORT = 8080;
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
