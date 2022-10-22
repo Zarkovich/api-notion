@@ -6,6 +6,7 @@ interface ThingToLearn {
     description: string | null;
     image: string | null;
     title: string | null;
+    link: string | null;
 }
 
 const notionToken = process.env.NOTION_TOKEN;
@@ -36,23 +37,26 @@ app.get("/", async (req, res) => {
         const descriptionCell = row.properties.description;
         const imageCell = row.properties.image;
         const titleCell = row.properties.title;
+        const linkCell = row.properties.link;
 
         const isdescription = descriptionCell.type === "rich_text";
         const isimage = imageCell.type === "url";
         const istitle = titleCell.type === "title";
+        const isLink = linkCell.type === "url";
 
-        if (isdescription && isimage && istitle) {
+        if (isdescription && isimage && istitle && isLink) {
             const description = descriptionCell.rich_text[0]
                 ? descriptionCell.rich_text[0].plain_text
                 : null;
             const image = imageCell.url ?? "";
+            const link = linkCell.url ?? "";
             const title = titleCell.title[0]
                 ? titleCell.title[0].plain_text
                 : null;
 
-            return { description, image, title };
+            return { description, image, title, link };
         }
-        return { description: null, image: "", title: null };
+        return { description: null, image: "", title: null, link: "" };
     });
 
     res.send(list);

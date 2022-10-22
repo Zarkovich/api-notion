@@ -34,24 +34,27 @@ app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         database_id: notionDatabase,
     });
     const list = query.results.map((row) => {
-        var _a;
+        var _a, _b;
         const descriptionCell = row.properties.description;
         const imageCell = row.properties.image;
         const titleCell = row.properties.title;
+        const linkCell = row.properties.link;
         const isdescription = descriptionCell.type === "rich_text";
         const isimage = imageCell.type === "url";
         const istitle = titleCell.type === "title";
-        if (isdescription && isimage && istitle) {
+        const isLink = linkCell.type === "url";
+        if (isdescription && isimage && istitle && isLink) {
             const description = descriptionCell.rich_text[0]
                 ? descriptionCell.rich_text[0].plain_text
                 : null;
             const image = (_a = imageCell.url) !== null && _a !== void 0 ? _a : "";
+            const link = (_b = linkCell.url) !== null && _b !== void 0 ? _b : "";
             const title = titleCell.title[0]
                 ? titleCell.title[0].plain_text
                 : null;
-            return { description, image, title };
+            return { description, image, title, link };
         }
-        return { description: null, image: "", title: null };
+        return { description: null, image: "", title: null, link: "" };
     });
     res.send(list);
 }));
